@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+        <title>Admin Dashboard</title>
+    </head>
+    <body>
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+            <p class="{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <br>
+        <div class="row justify-content-between">
+            <div class="col">
+                <h2>Administrator Dashboard</h2>
+            </div>
+            <div class="col-2">
+                <span>{{ user.first_name }} {{ user.last_name }}</span>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+        <br>
+        <div class="row justify-content-between">
+            <div class="col">
+                <h4>Manage Users:</h4>
+            </div>
+            <div class="col-2">
+                <a href="/users/new" class="btn btn-secondary" role="button" >Add New User</a>    
+            </div>
+        </div>
+        <br>
+        <br>
+        <table class="table table-striped">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Created At</th>
+                    <th>User Level</th>
+                    <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <th scope="row">{{ user.id }}</th>
+                    <td><a href="/users/show/profile/{{ user.id }}">{{ user.first_name }}</a></td>
+                    <td>{{ user.last_name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.created_at }}</td>
+                    <td>{{ user.user_level.level }}</td>                    
+                    <td><a href="/users/edit/info/{{ user.id }}">Edit User</a><span> | </span><a href="/users/edit/profile/{{ user.id }}">Edit Profile</a><span> | </span><a href="/process/remove/{{ user.id }}">Remove</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </body>
+</html>

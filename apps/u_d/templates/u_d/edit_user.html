@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+        <title>Edit User</title>
+    </head>
+    <body>
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+            <p class="{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <br>
+        <div class="row justify-content-between">
+            <div class="col">
+                <h2>Edit User - {{ user.first_name }} {{ user.last_name }}</h2>
+            </div>
+            <div class="col-3">
+                <a href="/dashboard/admin" class="btn btn-secondary" role="button" >Return to Dashboard</a>    
+            </div>
+        </div>
+        <br>
+        <br>          
+        <div class="row">
+            <div class="col">
+                <h4>Edit Info: </h4>
+                <br>  
+                <form action="/process/edit/info/{{ user.id }}" method="POST">
+                {% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <div class="form-group">
+                        <label for="inputFirst">First Name:</label>
+                        <input type="text" class="form-control" id="inputFirst" name="first_name" placeholder="Edit first name - {{ user.first_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputLast">Last Name:</label>
+                        <input type="text" class="form-control" id="inputLast" name="last_name" placeholder="Edit last name - {{ user.last_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">Email:</label>
+                        <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Edit email - {{ user.email }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="selectLevel">Select User Level:</label>
+                        <select class="form-control" name="user_level" id="selectLevel">
+                            <option value="admin">admin</option>
+                            <option value="normal">normal</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Info</button>
+                </form>
+            </div>
+            <div class="col">
+                <h4>Edit Password:</h4>
+                <br>  
+                <form action="/process/edit/info/{{ user.id }}" method="POST">
+                {% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ user.id }}">                
+                    <div class="form-group">
+                        <label for="inputPw">Password:</label>
+                        <input type="password" class="form-control" id="inputPw" name="pw" placeholder="Enter new password">
+                        <small class="form-text text-muted">*Password must be at least 8 characters, with at least 1 upper case letter, 1 lower case letter, 1 number, and 1 special character.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPwConfirm">Password Confirm:</label>
+                        <input type="password" class="form-control" id="inputPwConfirm" name="pw_confirm" placeholder="Confirm new password">
+                        <small class="form-text text-muted">*Passwords must match.</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>

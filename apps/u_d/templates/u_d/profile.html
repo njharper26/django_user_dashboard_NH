@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+        <title>Profile</title>
+    </head>
+    <body>
+    <div class="container">
+    {% if messages %}
+        {% for message in messages %}
+        <p class="{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+        <br>
+        <div class="row justify-content-between">
+            <div class="col">
+                <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+            </div>
+            <div class="col-2">
+                <span>{{ viewer.first_name }} {{ viewer.last_name }}</span>
+                <a href="/logout">Logout</a>
+                <br>
+                <br>
+                <a href="/dashboard/{{ user.user_level.level }}" class="btn btn-secondary" role="button" >Return to Dashboard</a>
+                <br>
+                <br>
+                {% if user.id == request.session.id %}
+                <a href="/users/edit/profile/{{ user.id }}" class="btn btn-info" role="button" >Edit Profile</a>
+                {% endif %}  
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-2">
+                <h5>Registered At:</h5>
+                <h5>User ID: </h5>
+                <h5>Email:</h5>
+                <h5>Description:</h5>
+            </div>
+            <div class="col-10">
+                <h5 class="font-weight-normal">{{ user.created_at }}</h5>
+                <h5 class="font-weight-normal">{{ user.id }}</h5>
+                <h5 class="font-weight-normal">{{ user.email }}</h5>
+                <h5 class="text-justify font-weight-normal">{{ user.user_desc.desc }}</h5>
+            </div>
+        </div>
+        <br>
+        <br>
+        <h4>Leave a message for {{ user.first_name }}:</h4>
+        <br>  
+        <form action="/process/message/{{ user.id }}" method="POST">
+        {% csrf_token %}
+            <input type="hidden" name="receiver_id" value="{{ user.id }}">                
+            <input type="hidden" name="sender_id" value="{{ request.session.id }}">                
+            <div class="form-group">
+                <textarea class="form-control" rows="4" name="message" placeholder="Type your message for {{ user.first_name }} here..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-info">Post Message</button>
+        </form>
+        <br>
+        {% for message in messages_list %}
+        <div class="row justify-content-between">
+            <div class="col">
+                <p class="font-weight-bold">{{ message.sender }} <span class="font-italic"> Posted a New Message:</span></p>
+            </div>
+            <div class="col-3">
+                <p class="font-italic font-weight-bold">{{ message.created_at }}</p>
+            </div>
+        </div>
+        <div class="w-100 p-4 border border-primary">
+            <p class="text-justify">{{ message.message }}</p>
+        </div>
+        <br>
+        {% for comment in message.comments %}
+        <br>
+        <div class="row justify-content-start">
+            <div class="col">
+                <p>{{ comment.commenter.first_name }} <span class="font-italic"> Commented:</span></p>
+            </div>
+            <div class="col-6">
+                <p class="font-italic">{{ comment.created_at }}</p>
+            </div>
+        </div>
+        <div class="w-75 p-4 border border-info">{{ comment.comment }}</div>
+        <br>
+        {% endfor %}
+        <br>
+        <h5>Comment on the Message (above):</h5>
+        <br>
+        <form action="/process/comment/{{ user.id }}" method="POST">
+        {% csrf_token %}
+            <input type="hidden" name="message_id" value="{{ message.id }}">                
+            <input type="hidden" name="commenter_id" value="{{ request.session.id }}">                
+            <div class="form-group">
+                <textarea class="form-control w-75" rows="4" name="comment" placeholder="Type your comment for {{ user.first_name }} here..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-secondary">Post Comment</button>
+        </form>
+        <br>
+        <br>
+        <br>
+        {% endfor %}
+    </div>
+    </body>
+</html>

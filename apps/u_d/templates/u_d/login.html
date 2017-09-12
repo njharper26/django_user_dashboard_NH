@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+        <title>Login</title>
+    </head>
+    <body>
+    <div class="container">
+    {% if messages %}
+        {% for message in messages %}
+        <p class="{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+        <br>           
+        <div class="row">
+            <div class="col"> 
+                <h2>Login:</h2>
+                <br>
+                <form action="/process/login" method="POST">
+                {% csrf_token %}                
+                    <div class="form-group">
+                        <label for="inputEmail">Email:</label>
+                        <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPw">Password:</label>
+                        <input type="password" class="form-control" id="inputPw" name="pw" placeholder="Enter password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button> 
+                </form>
+                <br>
+                <a href="/register">Click Here to Register as an Admin</a>
+            </div> 
+        </div>   
+    </div>
+    </body>
+</html>
